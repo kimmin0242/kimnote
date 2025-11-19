@@ -426,15 +426,38 @@
                 categories.all.push(part);
                 
                 const mainCat = part.category_main ? part.category_main.toLowerCase() : '';
-                if (mainCat.includes('엔진') || mainCat.includes('오일')) {
+                const subCat = part.category_sub ? part.category_sub.toLowerCase() : '';
+                const productName = part.product_name ? part.product_name.toLowerCase() : '';
+                
+                // 제품명 기준으로 정확하게 분류
+                
+                // 1. 엔진류: 엔진오일만 (변속기, 트랜스미션 제외)
+                if (productName.includes('엔진오일') || 
+                    (productName.includes('engine oil') && 
+                     !productName.includes('transmission') && 
+                     !productName.includes('변속'))) {
                     categories.engine.push(part);
-                } else if (mainCat.includes('필터')) {
+                } 
+                // 2. 필터류: 각종 필터
+                else if (productName.includes('필터') || 
+                         productName.includes('filter') || 
+                         productName.includes('엘리먼트')) {
                     categories.filter.push(part);
-                } else if (mainCat.includes('와이퍼')) {
+                } 
+                // 3. 와이퍼
+                else if (productName.includes('와이퍼') || 
+                         productName.includes('wiper') ||
+                         productName.includes('블레이드')) {
                     categories.wiper.push(part);
-                } else if (mainCat.includes('브레이크')) {
+                } 
+                // 4. 브레이크
+                else if (productName.includes('브레이크') || 
+                         productName.includes('brake') ||
+                         productName.includes('패드')) {
                     categories.brake.push(part);
-                } else {
+                } 
+                // 5. 기타 (변속기오일, ATF, 조향유, DCT오일, 부동액 등)
+                else {
                     categories.other.push(part);
                 }
             });
