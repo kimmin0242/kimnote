@@ -1,0 +1,233 @@
+═══════════════════════════════════════════════════════════════
+  HYUNDAI PARTS SYSTEM - ENGINE OIL FIX INSTALLATION
+═══════════════════════════════════════════════════════════════
+
+📦 DOWNLOAD PACKAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+File: hyundai-parts-fix-complete.tar.gz (16 KB)
+Location: /home/user/webapp/hyundai-parts-fix-complete.tar.gz
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 INSTALLATION STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: BACKUP (Recommended)
+────────────────────────────────────────────────────────────────
+SSH to Synology NAS:
+
+  ssh admin@YOUR_NAS_IP
+  cd /volume1/web/hyundai-parts
+  
+  # Backup current files
+  cp -r api api_backup_$(date +%Y%m%d)
+  cp index.php index_backup_$(date +%Y%m%d).php
+  
+  # Backup database
+  mysqldump -u hyundai_user -p'Hyundai@2025' hyundai_parts \
+    > backup_$(date +%Y%m%d).sql
+
+────────────────────────────────────────────────────────────────
+
+STEP 2: UPLOAD PACKAGE
+────────────────────────────────────────────────────────────────
+From your computer:
+
+  scp hyundai-parts-fix-complete.tar.gz \
+    admin@YOUR_NAS_IP:/volume1/web/hyundai-parts/
+
+Or use Synology File Station:
+  - Navigate to /web/hyundai-parts/
+  - Click Upload
+  - Select hyundai-parts-fix-complete.tar.gz
+
+────────────────────────────────────────────────────────────────
+
+STEP 3: EXTRACT FILES
+────────────────────────────────────────────────────────────────
+SSH to Synology NAS:
+
+  cd /volume1/web/hyundai-parts
+  tar -xzf hyundai-parts-fix-complete.tar.gz
+  rm hyundai-parts-fix-complete.tar.gz
+
+Files extracted:
+  ✓ api/get_trims.php
+  ✓ api/get_fuel_types.php
+  ✓ api/get_engines.php (updated)
+  ✓ api/get_models.php (updated)
+  ✓ api/search_parts_advanced.php
+  ✓ index.php (updated)
+  ✓ Documentation files
+
+────────────────────────────────────────────────────────────────
+
+STEP 4: SET PERMISSIONS
+────────────────────────────────────────────────────────────────
+Still in SSH:
+
+  chmod 644 api/*.php
+  chmod 644 index.php
+  chown http:http api/*.php index.php
+
+────────────────────────────────────────────────────────────────
+
+STEP 5: VERIFY FILES
+────────────────────────────────────────────────────────────────
+Check files are in place:
+
+  ls -la api/
+  
+Should show:
+  - get_engines.php
+  - get_fuel_types.php
+  - get_models.php
+  - get_trims.php
+  - search_parts.php
+  - search_parts_advanced.php
+
+  ls -la index.php
+  
+Should show: index.php with recent timestamp
+
+────────────────────────────────────────────────────────────────
+
+STEP 6: TEST INSTALLATION
+────────────────────────────────────────────────────────────────
+1. Open browser: http://YOUR_NAS_IP/hyundai-parts/
+
+2. You should see NEW interface with:
+   - 5 search fields (차명*, 세대*, 연료, 엔진, 부품명)
+   - Required fields marked with *
+   - Modern Bootstrap design
+
+3. Test search:
+   - Select 차명: G80
+   - Select 세대: RG3 (3세대)
+   - Click 검색하기
+
+4. Verify results:
+   - Click 엔진류 tab
+   - Should see:
+     ✓ 엔진오일 (대) - Part# 05100-2S400
+     ✓ 엔진오일 (소) - Part# 05100-2S100
+
+5. Test mobile view:
+   - Resize browser to mobile size
+   - Check responsive design works
+
+────────────────────────────────────────────────────────────────
+
+STEP 7: MONITOR LOGS
+────────────────────────────────────────────────────────────────
+Check for errors:
+
+  # Apache error log
+  tail -f /var/log/apache2/error_log
+  
+  # PHP error log (if enabled)
+  tail -f /var/log/php_errors.log
+
+Expected: No errors
+
+────────────────────────────────────────────────────────────────
+
+✅ VERIFICATION CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+□ Backup completed successfully
+□ Package uploaded to NAS
+□ Files extracted correctly
+□ Permissions set (644 for PHP files)
+□ Main page loads without errors
+□ Search dropdowns populate correctly
+□ G80 RG3 search shows engine oil parts
+□ Tabbed results display works
+□ Mobile view is responsive
+□ No errors in Apache log
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROBLEM: Page shows blank screen
+SOLUTION:
+  - Check Apache error log
+  - Verify PHP syntax: php -l index.php
+  - Check file permissions
+
+PROBLEM: 404 on API calls
+SOLUTION:
+  - Verify files exist in api/ folder
+  - Check file permissions (should be 644)
+  - Restart Apache: /etc/init.d/apache2 restart
+
+PROBLEM: Empty dropdowns
+SOLUTION:
+  - Check browser console (F12) for JavaScript errors
+  - Test API directly: curl http://localhost/hyundai-parts/api/get_models.php
+  - Verify database connection in config/db.php
+
+PROBLEM: Engine oil still missing
+SOLUTION:
+  - Check database data:
+    mysql -u hyundai_user -p -e "
+      USE hyundai_parts;
+      SELECT * FROM genuine_parts 
+      WHERE product_name LIKE '%엔진오일%';
+    "
+  - Verify compatible_engines column has '전체' value
+
+PROBLEM: Database connection failed
+SOLUTION:
+  - Check config/db.php credentials
+  - Verify MariaDB is running
+  - Test connection: mysql -u hyundai_user -p
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 ROLLBACK (If Needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If something goes wrong:
+
+  cd /volume1/web/hyundai-parts
+  
+  # Restore files
+  rm -rf api
+  mv api_backup_YYYYMMDD api
+  mv index_backup_YYYYMMDD.php index.php
+  
+  # Restore database (if needed)
+  mysql -u hyundai_user -p hyundai_parts < backup_YYYYMMDD.sql
+  
+  # Restart Apache
+  /etc/init.d/apache2 restart
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For detailed documentation, read:
+  - README_FIX.md              → Quick reference
+  - QUICK_DEPLOYMENT.md        → 5-minute guide
+  - DEPLOYMENT_SUMMARY.md      → Full deployment guide
+  - FIX_EXPLANATION.md         → Technical details
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ SUCCESS!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If all verification steps pass:
+  ✅ Engine oil parts fix is COMPLETE
+  ✅ System is ready for production use
+  ✅ Users can now search and find all parts correctly
+
+Total installation time: ~5 minutes
+Risk level: Low (backward compatible)
+
+═══════════════════════════════════════════════════════════════
