@@ -55,6 +55,23 @@ try {
             } else {
                 echo "\n<span class='error'>✗ vehicle_parts_mapping 테이블이 없습니다. 생성이 필요합니다.</span>\n";
             }
+            
+            // car_models 테이블 구조 확인
+            echo "\n\n=== car_models 테이블 구조 ===\n";
+            $columns = $pdo->query("DESCRIBE car_models")->fetchAll();
+            foreach ($columns as $col) {
+                $null = $col['Null'] == 'NO' ? '필수' : '선택';
+                $default = $col['Default'] ? "기본값: {$col['Default']}" : '기본값 없음';
+                echo "  - {$col['Field']}: {$col['Type']} ({$null}, {$default})\n";
+            }
+            
+            // car_engines 테이블 구조 확인
+            echo "\n=== car_engines 테이블 구조 ===\n";
+            $columns = $pdo->query("DESCRIBE car_engines")->fetchAll();
+            foreach ($columns as $col) {
+                $null = $col['Null'] == 'NO' ? '필수' : '선택';
+                echo "  - {$col['Field']}: {$col['Type']} ({$null})\n";
+            }
             break;
             
         case 'create_tables':
@@ -99,10 +116,22 @@ try {
             
             $pdo->beginTransaction();
             
-            // 1. 차량 모델 (기존 테이블 구조에 맞춤)
-            $pdo->exec("INSERT INTO car_models (model_name, generation) 
-                        VALUES ('G80', 'RG3 (3세대)')
-                        ON DUPLICATE KEY UPDATE model_name = VALUES(model_name)");
+            // 1. 차량 모델 (기존 테이블 구조에 맞춰서 필수 필드 모두 포함)
+            // manufacturer 필드가 필수일 경우를 대비
+            $checkStmt = $pdo->query("DESCRIBE car_models");
+            $columns = $checkStmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (in_array('manufacturer', $columns)) {
+                // manufacturer 필드 있음
+                $pdo->exec("INSERT INTO car_models (manufacturer, model_name, generation) 
+                            VALUES ('현대', 'G80', 'RG3 (3세대)')
+                            ON DUPLICATE KEY UPDATE model_name = VALUES(model_name)");
+            } else {
+                // manufacturer 필드 없음
+                $pdo->exec("INSERT INTO car_models (model_name, generation) 
+                            VALUES ('G80', 'RG3 (3세대)')
+                            ON DUPLICATE KEY UPDATE model_name = VALUES(model_name)");
+            }
             
             $modelStmt = $pdo->query("SELECT id FROM car_models WHERE model_name = 'G80' AND generation = 'RG3 (3세대)'");
             $modelId = $modelStmt->fetchColumn();
