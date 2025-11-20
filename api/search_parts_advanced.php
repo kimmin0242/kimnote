@@ -85,9 +85,11 @@ try {
     
     $params = [];
     
-    // **CRITICAL FIX**: Only match engine-specific parts, exclude universal '전체' parts
-    // This prevents showing all master catalog parts
-    $engineConditions = [];
+    // **CRITICAL FIX**: Match engine-specific parts OR essential '전체' parts
+    // Allow '전체' parts only for essential engine maintenance categories
+    $engineConditions = [
+        "(compatible_engines = '전체' AND category_main IN ('엔진오일(대)', '엔진오일(소)', '오일필터', '오일량'))"
+    ];
     
     foreach ($vehicleEngines as $index => $engine) {
         $paramKey = ":engine_" . $index;
@@ -98,9 +100,6 @@ try {
     if (!empty($engineConditions)) {
         $sql .= " AND (" . implode(' OR ', $engineConditions) . ")";
     }
-    
-    // Explicitly exclude '전체' parts to prevent showing all universal parts
-    $sql .= " AND compatible_engines != '전체'";
     
     // Optional part name filter
     if ($partName) {
