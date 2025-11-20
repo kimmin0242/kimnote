@@ -99,10 +99,10 @@ try {
             
             $pdo->beginTransaction();
             
-            // 1. 차량 모델
-            $pdo->exec("INSERT INTO car_models (manufacturer, brand, category, model_name, generation, description) 
-                        VALUES ('현대', '제너시스', '제너시스 세단', 'G80', 'RG3 (3세대)', 'G80 3세대 모델')
-                        ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP");
+            // 1. 차량 모델 (기존 테이블 구조에 맞춤)
+            $pdo->exec("INSERT INTO car_models (model_name, generation) 
+                        VALUES ('G80', 'RG3 (3세대)')
+                        ON DUPLICATE KEY UPDATE model_name = VALUES(model_name)");
             
             $modelStmt = $pdo->query("SELECT id FROM car_models WHERE model_name = 'G80' AND generation = 'RG3 (3세대)'");
             $modelId = $modelStmt->fetchColumn();
