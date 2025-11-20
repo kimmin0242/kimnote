@@ -85,11 +85,9 @@ try {
     
     $params = [];
     
-    // **CRITICAL FIX**: Build engine compatibility condition
-    // Parts can be either:
-    // 1. Universal parts (compatible_engines = '전체') - all categories
-    // 2. Engine-specific parts (compatible_engines LIKE engine_type) - all categories
-    $engineConditions = ["compatible_engines = '전체'"];
+    // **CRITICAL FIX**: Only match engine-specific parts, exclude universal '전체' parts
+    // This prevents showing all master catalog parts
+    $engineConditions = [];
     
     foreach ($vehicleEngines as $index => $engine) {
         $paramKey = ":engine_" . $index;
@@ -97,7 +95,12 @@ try {
         $params[$paramKey] = '%' . $engine . '%';
     }
     
-    $sql .= " AND (" . implode(' OR ', $engineConditions) . ")";
+    if (!empty($engineConditions)) {
+        $sql .= " AND (" . implode(' OR ', $engineConditions) . ")";
+    }
+    
+    // Explicitly exclude '전체' parts to prevent showing all universal parts
+    $sql .= " AND compatible_engines != '전체'";
     
     // Optional part name filter
     if ($partName) {
