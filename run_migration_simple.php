@@ -147,9 +147,9 @@ try {
         // Step 2: 엔진
         echo "\nStep 2: 엔진 정보 입력...\n";
         
-        $sql = "INSERT INTO car_engines (car_model_id, fuel_type, engine_type) 
-                VALUES ({$modelId}, '가솔린', '직렬 4기통 2.5 가솔린 터보')
-                ON DUPLICATE KEY UPDATE fuel_type = VALUES(fuel_type)";
+        $sql = "INSERT INTO car_engines (car_model_id, engine_type, engine_name) 
+                VALUES ({$modelId}, '가솔린 직렬 4기통 2.5 터보', '2.5 T-GDi')
+                ON DUPLICATE KEY UPDATE engine_type = VALUES(engine_type)";
         
         $pdo->exec($sql);
         
@@ -203,6 +203,7 @@ try {
                     cm.model_name,
                     cm.generation,
                     ce.engine_type,
+                    ce.engine_name,
                     gp.category_main,
                     gp.part_number,
                     vpm.quantity
@@ -211,7 +212,7 @@ try {
                 JOIN car_models cm ON ce.car_model_id = cm.id
                 JOIN genuine_parts gp ON vpm.part_id = gp.id
                 WHERE cm.model_name = 'G80' 
-                AND cm.generation LIKE '%RG3%'
+                AND (cm.generation LIKE '%RG3%' OR cm.generation = 'RG3 (3세대)')
                 ORDER BY gp.category_main";
         
         $stmt = $pdo->query($sql);
