@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 $host = 'localhost';
 $dbname = 'hyundai_parts';
 $username = 'root';
-$password = 'Wkddnjsqls!@12';
+$password = 'Hyundai@2025';
 
 try {
     // Create PDO connection

@@ -4,7 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 $host = 'localhost';
 $dbname = 'hyundai_parts';
 $username = 'root';
-$password = 'Wkddnjsqls!@12';
+$password = 'Hyundai@2025';
 
 try {
     $pdo = new PDO(
