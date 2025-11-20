@@ -99,7 +99,7 @@ try {
         // Add search query filter
         if (!empty($search_query)) {
             $sql .= " AND (gp.part_number LIKE :search_query 
-                      OR gp.part_name LIKE :search_query
+                      OR gp.product_name LIKE :search_query
                       OR gp.category_main LIKE :search_query
                       OR gp.category_sub LIKE :search_query)";
             $params[':search_query'] = '%' . $search_query . '%';
@@ -122,7 +122,7 @@ try {
             $formattedParts[] = [
                 'id' => $part['id'],
                 'part_number' => $part['part_number'],
-                'part_name' => $part['part_name'],
+                'part_name' => $part['product_name'],  // ← 수정: product_name 사용
                 'category_main' => $part['category_main'],
                 'category_sub' => $part['category_sub'],
                 'compatible_engines' => $part['compatible_engines'],
@@ -133,10 +133,10 @@ try {
                 'part_type' => $part['part_type'] ?? '',
                 'model_name' => $part['model_name'] ?? '',
                 'generation' => $part['generation'] ?? '',
-                'price' => $part['price'] ?? 0,
-                'stock_status' => $part['stock_status'] ?? '확인 필요',
-                'manufacturer' => $part['manufacturer'] ?? '현대',
-                'description' => $part['description'] ?? ''
+                'price' => 0,  // ← price 컬럼 없음
+                'stock_status' => '확인 필요',  // ← stock_status 컬럼 없음
+                'manufacturer' => '현대',
+                'description' => $part['notes'] ?? ''  // ← 수정: notes 사용
             ];
         }
 
@@ -201,7 +201,7 @@ try {
         // Add search query filter
         if (!empty($search_query)) {
             $sql .= " AND (part_number LIKE :search_query 
-                      OR part_name LIKE :search_query
+                      OR product_name LIKE :search_query
                       OR category_main LIKE :search_query
                       OR category_sub LIKE :search_query)";
             $params[':search_query'] = '%' . $search_query . '%';
