@@ -85,12 +85,11 @@ try {
     
     $params = [];
     
-    // **CRITICAL FIX**: Parts with compatible_engines = '전체' should only include specific categories
-    // Build engine compatibility condition
-    // Only include '전체' parts for essential engine maintenance categories
-    $engineConditions = [
-        "(compatible_engines = '전체' AND category_main IN ('엔진오일(대)', '엔진오일(소)', '오일필터', '오일량'))"
-    ];
+    // **CRITICAL FIX**: Build engine compatibility condition
+    // Parts can be either:
+    // 1. Universal parts (compatible_engines = '전체') - all categories
+    // 2. Engine-specific parts (compatible_engines LIKE engine_type) - all categories
+    $engineConditions = ["compatible_engines = '전체'"];
     
     foreach ($vehicleEngines as $index => $engine) {
         $paramKey = ":engine_" . $index;

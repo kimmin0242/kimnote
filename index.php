@@ -429,34 +429,30 @@
                 const subCat = part.category_sub ? part.category_sub.toLowerCase() : '';
                 const productName = part.product_name ? part.product_name.toLowerCase() : '';
                 
-                // 제품명 기준으로 정확하게 분류
+                // category_main 기준으로 정확하게 분류
                 
-                // 1. 엔진류: 엔진오일만 (변속기, 트랜스미션 제외)
-                if (productName.includes('엔진오일') || 
-                    (productName.includes('engine oil') && 
-                     !productName.includes('transmission') && 
-                     !productName.includes('변속'))) {
+                // 1. 엔진류: 엔진오일, 오일필터, 오일량 (미션오일, 부동액 제외)
+                if (mainCat.startsWith('엔진오일') || 
+                    mainCat === '오일필터' || 
+                    mainCat === '오일량' ||
+                    (mainCat.includes('오일') && !mainCat.includes('미션') && !mainCat.includes('변속') && 
+                     !mainCat.includes('부동액') && !mainCat.includes('atf') && !mainCat.includes('dct'))) {
                     categories.engine.push(part);
                 } 
-                // 2. 필터류: 각종 필터
-                else if (productName.includes('필터') || 
-                         productName.includes('filter') || 
-                         productName.includes('엘리먼트')) {
+                // 2. 필터류: 에어필터, 에어컨필터, 연료필터 등 (오일필터 제외 - 이미 엔진류에 포함)
+                else if ((mainCat.includes('필터') || mainCat.includes('filter') || mainCat.includes('엘리먼트')) && 
+                         !mainCat.includes('오일')) {
                     categories.filter.push(part);
                 } 
                 // 3. 와이퍼
-                else if (productName.includes('와이퍼') || 
-                         productName.includes('wiper') ||
-                         productName.includes('블레이드')) {
+                else if (mainCat.includes('와이퍼') || mainCat.includes('wiper') || mainCat.includes('블레이드')) {
                     categories.wiper.push(part);
                 } 
                 // 4. 브레이크
-                else if (productName.includes('브레이크') || 
-                         productName.includes('brake') ||
-                         productName.includes('패드')) {
+                else if (mainCat.includes('브레이크') || mainCat.includes('brake') || mainCat.includes('패드')) {
                     categories.brake.push(part);
                 } 
-                // 5. 기타 (변속기오일, ATF, 조향유, DCT오일, 부동액 등)
+                // 5. 기타 (미션오일, ATF, 조향유, DCT오일, 부동액 등)
                 else {
                     categories.other.push(part);
                 }
