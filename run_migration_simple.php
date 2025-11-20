@@ -129,8 +129,8 @@ try {
         // Step 1: 차량 모델
         echo "Step 1: 차량 모델 입력...\n";
         
-        $sql = "INSERT INTO car_models (manufacturer, category, model_name, generation) 
-                VALUES ('현대', '세단', 'G80', 'RG3 (3세대)')
+        $sql = "INSERT INTO car_models (manufacturer, brand_name, category, model_name, generation) 
+                VALUES ('현대', '제네시스', '세단', 'G80', 'RG3 (3세대)')
                 ON DUPLICATE KEY UPDATE manufacturer = VALUES(manufacturer)";
         
         $pdo->exec($sql);
