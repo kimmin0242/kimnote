@@ -427,7 +427,7 @@
                 
                 const mainCat = part.category_main ? part.category_main.toLowerCase() : '';
                 const subCat = part.category_sub ? part.category_sub.toLowerCase() : '';
-                const productName = part.product_name ? part.product_name.toLowerCase() : '';
+                const partName = part.part_name ? part.part_name.toLowerCase() : '';
                 
                 // category_main 기준으로 정확하게 분류
                 
@@ -499,11 +499,14 @@
                             <h6 class="mb-0">${part.category_main}${part.category_sub ? ' - ' + part.category_sub : ''}</h6>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">${part.product_name}</h5>
+                            <h3 class="card-title text-primary mb-3" style="font-size: 1.8rem; font-weight: bold;">
+                                ${part.part_number}
+                            </h3>
+                            <h6 class="card-subtitle mb-3 text-muted">${part.part_name || '부품명 없음'}</h6>
                             <p class="card-text mb-2">
-                                <strong>부품번호:</strong> <code>${part.part_number}</code><br>
-                                ${part.capacity ? `<strong>용량:</strong> ${part.capacity}<br>` : ''}
-                                ${part.compatible_engines ? `<strong>호환 엔진:</strong> ${part.compatible_engines}<br>` : ''}
+                                ${part.capacity ? `<strong>용량:</strong> <span class="badge bg-info">${part.capacity}</span><br>` : ''}
+                                ${part.quantity ? `<strong>수량:</strong> <span class="badge bg-success">${part.quantity}</span><br>` : ''}
+                                ${part.position ? `<strong>위치:</strong> <span class="badge bg-warning text-dark">${part.position}</span><br>` : ''}
                             </p>
                             ${part.notes ? `<p class="card-text"><small class="text-muted">${part.notes}</small></p>` : ''}
                         </div>
