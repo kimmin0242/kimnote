@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV 데이터 관리 시스템 - 배포 패키지 다운로드</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        .info-box h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info-box li {
+            padding: 8px 0;
+            color: #555;
+        }
+        .info-box li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .download-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .download-section h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .code-box .comment {
+            color: #6a9955;
+        }
+        .step {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .step h3 {
+            display: inline-block;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .warning strong {
+            color: #856404;
+        }
+        .file-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .file-list code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 CSV 데이터 관리 시스템</h1>
+        <p class="subtitle">현대차 부품 검색 시스템 - CSV 관리 기능 배포 패키지</p>
+
+        <div class="info-box">
+            <h2>📦 패키지 내용</h2>
+            <ul>
+                <li><strong>export_parts_csv.php</strong> - CSV 내보내기 기능</li>
+                <li><strong>import_parts_csv.php</strong> - CSV 가져오기 및 검증</li>
+                <li><strong>admin_index.php</strong> - 업데이트된 관리자 페이지</li>
+                <li><strong>DEPLOY.sh</strong> - 자동 배포 스크립트</li>
+                <li><strong>README.md</strong> - 상세 사용 가이드</li>
+                <li><strong>MANUAL_DEPLOY.md</strong> - 수동 배포 가이드</li>
+            </ul>
+        </div>
+
+        <div class="download-section">
+            <h2>⬇️ 다운로드</h2>
+            <p style="margin-bottom: 20px;">배포 패키지를 다운로드하여 서버에 배포하세요.</p>
+            <a href="csv_deployment.tar.gz" class="download-btn" download>
+                📥 csv_deployment.tar.gz 다운로드 (12 KB)
+            </a>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">1</span> wget으로 다운로드</h3>
+            <p>Synology NAS SSH에 접속한 후:</p>
+            <div class="code-box">
+<span class="comment"># 임시 디렉토리로 이동</span>
+cd /tmp
+
+<span class="comment"># wget으로 배포 패키지 다운로드</span>
+wget http://59.19.231.47/hyundai-parts/csv_deployment.tar.gz
+
+<span class="comment"># 압축 해제</span>
+tar -xzf csv_deployment.tar.gz
+
+<span class="comment"># 배포 디렉토리로 이동</span>
+cd csv_deployment
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span> 자동 배포 실행</h3>
+            <p>배포 스크립트를 실행하여 자동으로 설치:</p>
+            <div class="code-box">
+<span class="comment"># 실행 권한 부여</span>
+chmod +x DEPLOY.sh
+
+<span class="comment"># 배포 스크립트 실행</span>
+./DEPLOY.sh
+            </div>
+            <div class="warning">
+                <strong>⚠️ 주의:</strong> 배포 스크립트는 기존 파일을 자동으로 백업한 후 새 파일로 교체합니다.
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span> 수동 배포 (선택사항)</h3>
+            <p>자동 스크립트를 사용하지 않는 경우:</p>
+            <div class="code-box">
+<span class="comment"># CSV 파일 복사</span>
+cp export_parts_csv.php /volume1/web/hyundai-parts/
+cp import_parts_csv.php /volume1/web/hyundai-parts/
+
+<span class="comment"># 관리자 페이지 백업</span>
+cp /volume1/web/hyundai-parts/admin/index.php \
+   /volume1/web/hyundai-parts/admin/index.php.backup
+
+<span class="comment"># 새 관리자 페이지 복사</span>
+cp admin_index.php /volume1/web/hyundai-parts/admin/index.php
+
+<span class="comment"># 권한 설정</span>
+chmod 644 /volume1/web/hyundai-parts/*.php
+chmod 644 /volume1/web/hyundai-parts/admin/index.php
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">4</span> 배포 확인</h3>
+            <p>웹 브라우저에서 관리자 페이지 접속:</p>
+            <div class="code-box">
+URL: http://59.19.231.47/hyundai-parts/admin/
+ID: admin
+PW: admin123
+            </div>
+            <p style="margin-top: 15px;">확인 사항:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>"CSV 데이터 관리" 섹션이 보임</li>
+                <li>"CSV 다운로드" 버튼 클릭 가능</li>
+                <li>"CSV 업로드" 폼 작동</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h2>✨ 새로운 기능</h2>
+            <ul>
+                <li>모든 차량-부품 매핑 데이터를 Excel로 내보내기</li>
+                <li>Excel에서 편집 후 CSV 업로드로 일괄 업데이트</li>
+                <li>자동 데이터 검증 및 오류 보고</li>
+                <li>누락된 차량/엔진/부품 자동 생성</li>
+                <li>트랜잭션 기반 안전한 데이터 업로드</li>
+            </ul>
+        </div>
+
+        <div class="file-list">
+            <h3 style="margin-bottom: 10px; color: #333;">📁 배포 후 파일 구조</h3>
+            <pre style="font-family: monospace; color: #555; line-height: 1.8;">
+/volume1/web/hyundai-parts/
+├── <code>export_parts_csv.php</code>        ← 새 파일
+├── <code>import_parts_csv.php</code>        ← 새 파일
+└── admin/
+    ├── <code>index.php</code>               ← 업데이트됨
+    └── <code>index.php.backup.YYYYMMDD</code> ← 자동 백업
+            </pre>
+        </div>
+
+        <div class="warning">
+            <strong>📖 상세 가이드:</strong> 
+            압축 해제 후 <code>README.md</code> 파일에서 전체 사용 방법과 문제 해결 가이드를 확인하세요.
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: #666; font-size: 14px;">
+            <p><strong>GitHub Repository:</strong> <a href="https://github.com/kimmin0242/kimnote" target="_blank" style="color: #667eea;">kimmin0242/kimnote</a></p>
+            <p><strong>Pull Request:</strong> <a href="https://github.com/kimmin0242/kimnote/pull/1" target="_blank" style="color: #667eea;">#1</a></p>
+            <p style="margin-top: 20px;">버전 1.0.0 | 2025-11-22</p>
+        </div>
+    </div>
+</body>
+</html>

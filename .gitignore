@@ -1,0 +1,32 @@
+# Composer
+/vendor/
+composer.lock
+
+# 업로드 파일
+/uploads/*.xlsx
+/uploads/*.xls
+/uploads/*.csv
+
+# 로그 파일
+*.log
+error_log
+
+# 임시 파일
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# 환경 설정 (실제 운영 시)
+# config/db.php
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 백업 파일
+*.bak
+*.backup

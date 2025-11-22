@@ -1,0 +1,33 @@
+# Apache 설정
+
+# UTF-8 인코딩
+AddDefaultCharset UTF-8
+
+# PHP 설정
+php_value upload_max_filesize 20M
+php_value post_max_size 20M
+php_value max_execution_time 300
+php_value memory_limit 256M
+
+# 디렉토리 인덱스
+DirectoryIndex index.php index.html
+
+# 보안: .git 폴더 접근 차단
+<DirectoryMatch "\.git">
+    Require all denied
+</DirectoryMatch>
+
+# 보안: config 폴더 직접 접근 차단
+<FilesMatch "^(config|\.env)">
+    Require all denied
+</FilesMatch>
+
+# 에러 페이지 (선택사항)
+# ErrorDocument 404 /404.php
+# ErrorDocument 500 /500.php
+
+# URL 리라이팅 (필요시)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /hyundai-parts/
+</IfModule>

@@ -85,21 +85,11 @@ try {
     
     $params = [];
     
-    // **CRITICAL FIX**: Match engine-specific parts OR essential '전체' parts
-    // Allow '전체' parts only for essential engine maintenance categories
-    // But also filter by part number patterns to avoid wrong universal parts
-    
-    $engineConditions = [];
-    
-    // For G80 RG3 models, only include specific part number patterns
-    if ($modelName === 'G80' && strpos($generation, 'RG3') !== false) {
-        // Only allow '전체' parts with specific part number patterns for G80 RG3
-        $engineConditions[] = "(compatible_engines = '전체' AND category_main IN ('엔진오일(대)', '엔진오일(소)', '오일필터', '오일량') 
-                                AND (part_number LIKE '05100-2S%' OR part_number LIKE '26350 2%' OR category_main = '오일량'))";
-    } else {
-        // For other vehicles, allow all essential '전체' parts
-        $engineConditions[] = "(compatible_engines = '전체' AND category_main IN ('엔진오일(대)', '엔진오일(소)', '오일필터', '오일량'))";
-    }
+    // **CRITICAL FIX**: Build engine compatibility condition
+    // Parts can be either:
+    // 1. Universal parts (compatible_engines = '전체') - all categories
+    // 2. Engine-specific parts (compatible_engines LIKE engine_type) - all categories
+    $engineConditions = ["compatible_engines = '전체'"];
     
     foreach ($vehicleEngines as $index => $engine) {
         $paramKey = ":engine_" . $index;
@@ -107,9 +97,7 @@ try {
         $params[$paramKey] = '%' . $engine . '%';
     }
     
-    if (!empty($engineConditions)) {
-        $sql .= " AND (" . implode(' OR ', $engineConditions) . ")";
-    }
+    $sql .= " AND (" . implode(' OR ', $engineConditions) . ")";
     
     // Optional part name filter
     if ($partName) {
