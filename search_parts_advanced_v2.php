@@ -1,15 +1,9 @@
 <?php
 /**
- * Advanced parts search API with proper "전체" handling
- * 
- * This API handles the 5-level search system:
- * 1. 차명 (model_name) - Required
- * 2. 상세트림/세대 (generation) - Required
- * 3. 연료형식 (fuel_type) - Optional
- * 4. 엔진형식 (engine_type) - Optional
- * 5. 부품명 (part_name) - Optional
+ * Advanced parts search API - Version 2
+ * Only returns engine-specific parts (excludes '전체' universal parts)
  */
-require_once '../config/db.php';
+require_once 'config/db.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -85,21 +79,8 @@ try {
     
     $params = [];
     
-    // **CRITICAL FIX**: Match engine-specific parts OR essential '전체' parts
-    // Allow '전체' parts only for essential engine maintenance categories
-    // But also filter by part number patterns to avoid wrong universal parts
-    
+    // **NEW APPROACH**: Only match engine-specific parts, exclude '전체' parts
     $engineConditions = [];
-    
-    // For G80 RG3 models, only include specific part number patterns
-    if ($modelName === 'G80' && strpos($generation, 'RG3') !== false) {
-        // Only allow '전체' parts with specific part number patterns for G80 RG3
-        $engineConditions[] = "(compatible_engines = '전체' AND category_main IN ('엔진오일(대)', '엔진오일(소)', '오일필터', '오일량') 
-                                AND (part_number LIKE '05100-2S%' OR part_number LIKE '26350 2%' OR category_main = '오일량'))";
-    } else {
-        // For other vehicles, allow all essential '전체' parts
-        $engineConditions[] = "(compatible_engines = '전체' AND category_main IN ('엔진오일(대)', '엔진오일(소)', '오일필터', '오일량'))";
-    }
     
     foreach ($vehicleEngines as $index => $engine) {
         $paramKey = ":engine_" . $index;
@@ -110,6 +91,9 @@ try {
     if (!empty($engineConditions)) {
         $sql .= " AND (" . implode(' OR ', $engineConditions) . ")";
     }
+    
+    // Explicitly exclude '전체' parts to prevent showing all universal parts
+    $sql .= " AND compatible_engines != '전체'";
     
     // Optional part name filter
     if ($partName) {

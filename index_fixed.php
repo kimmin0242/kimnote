@@ -387,28 +387,13 @@
                 if (engineType) params.append('engine_type', engineType);
                 if (partName) params.append('part_name', partName);
                 
-                // Use absolute path from document root
-                const apiUrl = './api/search_parts_with_mapping.php?' + params.toString();
-                console.log('API 호출:', apiUrl);
-                
-                const response = await fetch(apiUrl);
-                
-                // Check if response is OK
-                if (!response.ok) {
-                    console.error('HTTP 에러:', response.status, response.statusText);
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
+                const response = await fetch(`api/search_parts_advanced.php?${params}`);
                 const data = await response.json();
-                console.log('API 응답:', data);
                 
                 document.getElementById('loading').classList.add('d-none');
                 
                 if (!data.success) {
                     alert(data.message || '검색 중 오류가 발생했습니다.');
-                    if (data.debug) {
-                        console.error('서버 에러:', data.debug);
-                    }
                     return;
                 }
                 
@@ -421,7 +406,7 @@
             } catch (error) {
                 console.error('검색 실패:', error);
                 document.getElementById('loading').classList.add('d-none');
-                alert('검색 중 오류가 발생했습니다.\n\n개발자 도구(F12)의 Console 탭에서 자세한 정보를 확인하세요.\n\n에러: ' + error.message);
+                alert('검색 중 오류가 발생했습니다.');
             }
         }
 
@@ -442,32 +427,36 @@
                 
                 const mainCat = part.category_main ? part.category_main.toLowerCase() : '';
                 const subCat = part.category_sub ? part.category_sub.toLowerCase() : '';
-                const partName = part.part_name ? part.part_name.toLowerCase() : '';
+                const productName = part.product_name ? part.product_name.toLowerCase() : '';
                 
-                // category_main 기준으로 정확하게 분류
+                // 제품명 기준으로 정확하게 분류
                 
-                // 1. 엔진류: 엔진오일, 오일필터, 오일량 (미션오일, 부동액 제외)
-                if (mainCat.startsWith('엔진오일') || 
-                    mainCat === '오일필터' || 
-                    mainCat === '오일량' ||
-                    (mainCat.includes('오일') && !mainCat.includes('미션') && !mainCat.includes('변속') && 
-                     !mainCat.includes('부동액') && !mainCat.includes('atf') && !mainCat.includes('dct'))) {
+                // 1. 엔진류: 엔진오일만 (변속기, 트랜스미션 제외)
+                if (productName.includes('엔진오일') || 
+                    (productName.includes('engine oil') && 
+                     !productName.includes('transmission') && 
+                     !productName.includes('변속'))) {
                     categories.engine.push(part);
                 } 
-                // 2. 필터류: 에어필터, 에어컨필터, 연료필터 등 (오일필터 제외 - 이미 엔진류에 포함)
-                else if ((mainCat.includes('필터') || mainCat.includes('filter') || mainCat.includes('엘리먼트')) && 
-                         !mainCat.includes('오일')) {
+                // 2. 필터류: 각종 필터
+                else if (productName.includes('필터') || 
+                         productName.includes('filter') || 
+                         productName.includes('엘리먼트')) {
                     categories.filter.push(part);
                 } 
                 // 3. 와이퍼
-                else if (mainCat.includes('와이퍼') || mainCat.includes('wiper') || mainCat.includes('블레이드')) {
+                else if (productName.includes('와이퍼') || 
+                         productName.includes('wiper') ||
+                         productName.includes('블레이드')) {
                     categories.wiper.push(part);
                 } 
                 // 4. 브레이크
-                else if (mainCat.includes('브레이크') || mainCat.includes('brake') || mainCat.includes('패드')) {
+                else if (productName.includes('브레이크') || 
+                         productName.includes('brake') ||
+                         productName.includes('패드')) {
                     categories.brake.push(part);
                 } 
-                // 5. 기타 (미션오일, ATF, 조향유, DCT오일, 부동액 등)
+                // 5. 기타 (변속기오일, ATF, 조향유, DCT오일, 부동액 등)
                 else {
                     categories.other.push(part);
                 }
@@ -514,20 +503,13 @@
                             <h6 class="mb-0">${part.category_main}${part.category_sub ? ' - ' + part.category_sub : ''}</h6>
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title text-primary mb-3" style="font-size: 1.8rem; font-weight: bold;">
-                                ${part.part_number}
-                            </h3>
-                            <h6 class="card-subtitle mb-3 text-muted">${part.product_name || '부품명 없음'}</h6>
+                            <h5 class="card-title">${part.product_name}</h5>
                             <p class="card-text mb-2">
-                                ${part.capacity ? `<strong>용량:</strong> <span class="badge bg-info">${part.capacity}</span><br>` : ''}
-                                ${part.quantity ? `<strong>수량:</strong> <span class="badge bg-success">${part.quantity}</span><br>` : ''}
-                                ${part.position ? `<strong>위치:</strong> <span class="badge bg-warning text-dark">${part.position}</span><br>` : ''}
+                                <strong>부품번호:</strong> <code>${part.part_number}</code><br>
+                                ${part.capacity ? `<strong>용량:</strong> ${part.capacity}<br>` : ''}
+                                ${part.compatible_engines ? `<strong>호환 엔진:</strong> ${part.compatible_engines}<br>` : ''}
                             </p>
-                            ${part.mapping_notes ? `
-                                <div class="alert alert-info py-2 px-3 mb-0" style="font-size: 0.9rem;">
-                                    <i class="fas fa-info-circle"></i> <strong>비고:</strong> ${part.mapping_notes}
-                                </div>
-                            ` : ''}
+                            ${part.notes ? `<p class="card-text"><small class="text-muted">${part.notes}</small></p>` : ''}
                         </div>
                     </div>
                 `;

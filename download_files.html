@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파일 다운로드 - 2단계 드롭다운 업데이트</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3><i class="fas fa-download"></i> 파일 다운로드</h3>
+                        <p class="mb-0">2단계 드롭다운 선택 시스템 업데이트</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <strong>📌 업데이트 내용:</strong>
+                            <ul class="mb-0">
+                                <li>부품 타입 선택을 2단계 드롭다운으로 변경 (카테고리 → 하위 항목)</li>
+                                <li>"기타" 카테고리에서 커스텀 하위분류 입력 가능</li>
+                                <li>확장성 및 사용자 경험 개선</li>
+                            </ul>
+                        </div>
+
+                        <h5 class="mt-4 mb-3"><i class="fas fa-file-archive"></i> 전체 파일 압축 다운로드</h5>
+                        <div class="list-group mb-4">
+                            <a href="hyundai-parts-two-tier-dropdown.tar.gz" class="list-group-item list-group-item-action" download>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1"><i class="fas fa-download text-primary"></i> hyundai-parts-two-tier-dropdown.tar.gz</h6>
+                                    <small class="text-muted">6.3 KB</small>
+                                </div>
+                                <p class="mb-1 text-muted">수정된 모든 파일 포함 (4개 파일)</p>
+                            </a>
+                        </div>
+
+                        <h5 class="mb-3"><i class="fas fa-file-code"></i> 개별 파일 다운로드</h5>
+                        <div class="list-group">
+                            <a href="admin_vehicle_parts.php" class="list-group-item list-group-item-action" download>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">📄 admin_vehicle_parts.php</h6>
+                                    <span class="badge bg-success">주요 파일</span>
+                                </div>
+                                <p class="mb-1 text-muted">관리자 페이지 - 2단계 드롭다운 구현</p>
+                            </a>
+                            
+                            <a href="get_vehicle_parts_api.php" class="list-group-item list-group-item-action" download>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">📄 get_vehicle_parts_api.php</h6>
+                                    <span class="badge bg-info">API</span>
+                                </div>
+                                <p class="mb-1 text-muted">부품 데이터 로드 API</p>
+                            </a>
+                            
+                            <a href="save_vehicle_parts_api.php" class="list-group-item list-group-item-action" download>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">📄 save_vehicle_parts_api.php</h6>
+                                    <span class="badge bg-info">API</span>
+                                </div>
+                                <p class="mb-1 text-muted">부품 데이터 저장 API</p>
+                            </a>
+                            
+                            <a href="api/search_parts_advanced.php" class="list-group-item list-group-item-action" download>
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">📄 api/search_parts_advanced.php</h6>
+                                    <span class="badge bg-warning">API</span>
+                                </div>
+                                <p class="mb-1 text-muted">부품 검색 API (매핑 테이블 사용)</p>
+                            </a>
+                        </div>
+
+                        <div class="alert alert-warning mt-4">
+                            <h6><i class="fas fa-exclamation-triangle"></i> 설치 안내</h6>
+                            <ol class="mb-0">
+                                <li>압축 파일 다운로드 후 압축 해제</li>
+                                <li>서버의 <code>/volume1/web/hyundai-parts/</code> 폴더에 업로드</li>
+                                <li>기존 파일 백업 권장</li>
+                                <li><code>admin_vehicle_parts.php</code>로 접속하여 테스트</li>
+                            </ol>
+                        </div>
+
+                        <div class="alert alert-success mt-3">
+                            <h6><i class="fab fa-github"></i> GitHub Pull Request</h6>
+                            <p class="mb-2">모든 변경사항은 GitHub에도 업로드되어 있습니다:</p>
+                            <a href="https://github.com/kimmin0242/kimnote/pull/1" target="_blank" class="btn btn-success btn-sm">
+                                <i class="fas fa-external-link-alt"></i> Pull Request #1 보기
+                            </a>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <a href="/" class="btn btn-outline-primary">
+                                <i class="fas fa-home"></i> 메인으로
+                            </a>
+                            <a href="admin_vehicle_parts.php" class="btn btn-primary">
+                                <i class="fas fa-cog"></i> 관리자 페이지
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted text-center">
+                        <small>업데이트 날짜: 2025-11-20</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

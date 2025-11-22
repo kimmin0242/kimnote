@@ -64,7 +64,7 @@ if (!$isLoggedIn) {
 $host = 'localhost';
 $dbname = 'hyundai_parts';
 $username = 'root';
-$password = 'Kdmdtt1225**';
+$password = 'Hyundai@2025';
 
 try {
     $pdo = new PDO(
@@ -168,51 +168,6 @@ $models = $pdo->query("SELECT DISTINCT model_name FROM car_models ORDER BY model
                 </div>
             </div>
         </div>
-
-        <!-- CSV 데이터 관리 섹션 -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h5>📊 CSV 데이터 관리</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- CSV 다운로드 -->
-                            <div class="col-md-6">
-                                <div class="border rounded p-3 h-100">
-                                    <h6><i class="fas fa-download"></i> CSV 내보내기</h6>
-                                    <p class="text-muted small">모든 차량-부품 매핑 데이터를 CSV 파일로 다운로드합니다.</p>
-                                    <a href="export_parts_csv.php" class="btn btn-success" download>
-                                        <i class="fas fa-file-csv"></i> CSV 다운로드
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- CSV 업로드 -->
-                            <div class="col-md-6">
-                                <div class="border rounded p-3 h-100">
-                                    <h6><i class="fas fa-upload"></i> CSV 가져오기</h6>
-                                    <p class="text-muted small">CSV 파일을 수정하여 일괄 업로드할 수 있습니다.</p>
-                                    <form id="csvUploadForm" enctype="multipart/form-data">
-                                        <div class="input-group mb-2">
-                                            <input type="file" class="form-control" id="csvFile" name="csv_file" accept=".csv" required>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-upload"></i> 업로드
-                                            </button>
-                                        </div>
-                                        <div class="form-text">
-                                            ⚠️ 기존 데이터와 중복되면 업데이트됩니다.
-                                        </div>
-                                    </form>
-                                    <div id="uploadResult" class="mt-2"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -220,46 +175,44 @@ $models = $pdo->query("SELECT DISTINCT model_name FROM car_models ORDER BY model
         // ========================================
         // 2단계 드롭다운: 부품 카테고리 및 하위 항목 정의
         // ========================================
-        // 부품 카테고리는 데이터베이스에서 동적으로 로드
-        let partCategories = {};
-        
-        // 페이지 로드 시 카테고리 불러오기
-        async function loadPartCategories() {
-            try {
-                const response = await fetch('api/part_categories_api.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'get_categories' })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    partCategories = result.categories;
-                    partCategories['기타'] = [];  // 기타는 항상 추가
-                } else {
-                    // API 실패 시 기본값 사용
-                    partCategories = {
-                        '오일 및 액체류': ['엔진오일(대)', '엔진오일(소)', '미션오일', '브레이크오일', '냉각수/부동액', '파워스티어링오일', '워셔액', '디퍼런셜오일'],
-                        '필터류': ['에어필터', '오일필터', '에어컨필터(실내)', '에어컨필터(외기)', '연료필터'],
-                        '제동류': ['브레이크 패드(앞축)', '브레이크 패드(뒤축)', '브레이크 디스크(앞)', '브레이크 디스크(뒤)', '타이어(앞)', '타이어(뒤)'],
-                        '전장 및 기타 부품류': ['배터리', '점화플러그', '점화코일', '구동벨트 (V벨트)', '타이밍벨트', '와이퍼 블레이드(좌)', '와이퍼 블레이드(우)', '와이퍼 블레이드(뒤)'],
-                        '기타': []
-                    };
-                }
-            } catch (error) {
-                console.error('카테고리 로딩 실패:', error);
-                // 오류 시 기본값 사용
-                partCategories = {
-                    '오일 및 액체류': ['엔진오일(대)', '엔진오일(소)', '미션오일', '브레이크오일', '냉각수/부동액', '파워스티어링오일', '워셔액', '디퍼런셜오일'],
-                    '필터류': ['에어필터', '오일필터', '에어컨필터(실내)', '에어컨필터(외기)', '연료필터'],
-                    '제동류': ['브레이크 패드(앞축)', '브레이크 패드(뒤축)', '브레이크 디스크(앞)', '브레이크 디스크(뒤)', '타이어(앞)', '타이어(뒤)'],
-                    '전장 및 기타 부품류': ['배터리', '점화플러그', '점화코일', '구동벨트 (V벨트)', '타이밍벨트', '와이퍼 블레이드(좌)', '와이퍼 블레이드(우)', '와이퍼 블레이드(뒤)'],
-                    '기타': []
-                };
-            }
-        }
-        
-        // 페이지 로드 시 카테고리 먼저 로드
-        loadPartCategories();
+        const partCategories = {
+            '오일 및 액체류': [
+                '엔진오일(대)',
+                '엔진오일(소)',
+                '미션오일',
+                '브레이크오일',
+                '냉각수/부동액',
+                '파워스티어링오일',
+                '워셔액',
+                '디퍼런셜오일'
+            ],
+            '필터류': [
+                '에어필터',
+                '오일필터',
+                '에어컨필터(실내)',
+                '에어컨필터(외기)',
+                '연료필터'
+            ],
+            '제동류': [
+                '브레이크 패드(앞축)',
+                '브레이크 패드(뒤축)',
+                '브레이크 디스크(앞)',
+                '브레이크 디스크(뒤)',
+                '타이어(앞)',
+                '타이어(뒤)'
+            ],
+            '전장 및 기타 부품류': [
+                '배터리',
+                '점화플러그',
+                '점화코일',
+                '구동벨트 (V벨트)',
+                '타이밍벨트',
+                '와이퍼 블레이드(좌)',
+                '와이퍼 블레이드(우)',
+                '와이퍼 블레이드(뒤)'
+            ],
+            '기타': []  // 기타는 커스텀 입력
+        };
 
         // 카테고리에서 부품 타입 찾기
         function findCategoryForPartType(partType) {
@@ -407,25 +360,20 @@ $models = $pdo->query("SELECT DISTINCT model_name FROM car_models ORDER BY model
                                placeholder="기타 하위분류" value="${isCustom ? part.part_type : ''}"
                                ${!isCustom ? 'style="display:none;"' : ''}>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label class="form-label small">부품번호</label>
                         <input type="text" class="form-control part-number" data-index="${index}" 
                                placeholder="부품번호" value="${part.part_number || ''}">
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <label class="form-label small">용량</label>
                         <input type="text" class="form-control capacity" data-index="${index}" 
                                placeholder="용량" value="${part.capacity || ''}">
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <label class="form-label small">수량</label>
                         <input type="text" class="form-control quantity" data-index="${index}" 
                                placeholder="수량" value="${part.quantity || ''}">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label small">비고 (연식, 특이사항 등)</label>
-                        <input type="text" class="form-control notes" data-index="${index}" 
-                               placeholder="예: 2021~2023년식, 고급형 전용 등" value="${part.notes || ''}">
                     </div>
                     <div class="col-md-1 text-center">
                         <label class="form-label small">&nbsp;</label>
@@ -480,8 +428,7 @@ $models = $pdo->query("SELECT DISTINCT model_name FROM car_models ORDER BY model
                 part_type: '엔진오일(대)',
                 part_number: '',
                 capacity: '',
-                quantity: '1개',
-                notes: ''
+                quantity: '1개'
             });
             renderParts();
         });
@@ -514,8 +461,7 @@ $models = $pdo->query("SELECT DISTINCT model_name FROM car_models ORDER BY model
                     part_type: partType,
                     part_number: row.querySelector('.part-number').value,
                     capacity: row.querySelector('.capacity').value,
-                    quantity: row.querySelector('.quantity').value,
-                    notes: row.querySelector('.notes').value
+                    quantity: row.querySelector('.quantity').value
                 });
             });
             
@@ -542,55 +488,6 @@ $models = $pdo->query("SELECT DISTINCT model_name FROM car_models ORDER BY model
                 document.getElementById('loadPartsBtn').click();
             } else {
                 alert('❌ 에러: ' + result.message);
-            }
-        });
-
-        // CSV 업로드 처리
-        document.getElementById('csvUploadForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const fileInput = document.getElementById('csvFile');
-            const resultDiv = document.getElementById('uploadResult');
-            
-            if (!fileInput.files.length) {
-                resultDiv.innerHTML = '<div class="alert alert-danger">파일을 선택하세요.</div>';
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('csv_file', fileInput.files[0]);
-            
-            resultDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> 업로드 중...</div>';
-            
-            try {
-                const response = await fetch('import_parts_csv.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    let html = `<div class="alert alert-success">
-                        <strong>✅ ${result.message}</strong><br>
-                        성공: ${result.success_count}건, 실패: ${result.error_count}건
-                    </div>`;
-                    
-                    if (result.errors && result.errors.length > 0) {
-                        html += '<div class="alert alert-warning"><strong>에러 목록:</strong><ul class="mb-0">';
-                        result.errors.forEach(err => {
-                            html += `<li>${err}</li>`;
-                        });
-                        html += '</ul></div>';
-                    }
-                    
-                    resultDiv.innerHTML = html;
-                    fileInput.value = ''; // 파일 입력 초기화
-                } else {
-                    resultDiv.innerHTML = `<div class="alert alert-danger">❌ ${result.message}</div>`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="alert alert-danger">❌ 업로드 실패: ${error.message}</div>`;
             }
         });
     </script>

@@ -1,0 +1,140 @@
+현대차 순정부품 관리 시스템 - 파일 구조
+
+hyundai-parts/
+│
+├── 📄 index.php                        메인 페이지 (사용자 검색 인터페이스)
+├── 📄 test.php                         DB 연결 테스트
+├── 📄 import_excel_data.php            엑셀 Import 스크립트 (독립 실행)
+├── 📄 database_setup.sql               데이터베이스 스키마 (테이블 생성)
+│
+├── 📄 composer.json                    Composer 설정
+├── 📄 .htaccess                        Apache 설정
+├── 📄 .gitignore                       Git 제외 파일
+│
+├── 📚 문서/
+│   ├── README.md                       프로젝트 소개 및 기능 설명
+│   ├── INSTALL.md                      설치 가이드 (상세)
+│   ├── DEPLOYMENT.md                   배포 가이드 (시놀로지 NAS)
+│   ├── CHANGELOG.md                    변경 이력
+│   ├── PROJECT_SUMMARY.md              프로젝트 전체 요약
+│   ├── QUICK_START.md                  빠른 시작 (5분 가이드)
+│   └── STRUCTURE.txt                   이 파일
+│
+├── 📁 config/                          설정 파일
+│   └── db.php                          데이터베이스 연결 및 공통 함수
+│
+├── 📁 api/                             사용자 API (프론트엔드용)
+│   ├── get_models.php                  차량 모델 목록 조회
+│   ├── get_engines.php                 엔진 목록 조회 (모델별)
+│   └── search_parts.php                부품 검색
+│
+├── 📁 admin/                           관리자 페이지
+│   ├── index.php                       관리자 메인 (대시보드/CRUD)
+│   │
+│   ├── 📁 js/
+│   │   └── admin.js                    관리자 JavaScript (AJAX, UI)
+│   │
+│   └── 📁 api/                         관리자 API (백엔드)
+│       ├── get_stats.php               통계 조회 (차량/엔진/부품 수)
+│       ├── models.php                  차량 모델 CRUD
+│       ├── engines.php                 엔진 정보 CRUD
+│       ├── parts.php                   부품 정보 CRUD
+│       └── import_excel.php            엑셀 Upload & Import
+│
+└── 📁 uploads/                         업로드 파일 저장소 (권한: 777)
+    └── 현대차량 순정부품.xlsx         엑셀 데이터 파일
+
+
+═══════════════════════════════════════════════════════════════
+
+주요 파일 설명
+
+[사용자 인터페이스]
+- index.php              : 부품 검색 메인 페이지
+                          Bootstrap 5 기반 반응형 디자인
+                          차량 → 엔진 → 부품 검색 플로우
+
+[관리자 인터페이스]
+- admin/index.php        : 관리자 대시보드
+                          차량/엔진/부품 CRUD
+                          통계 대시보드
+                          엑셀 Import UI
+
+[API 엔드포인트]
+- api/*.php              : 사용자 페이지용 REST API
+- admin/api/*.php        : 관리자 페이지용 REST API
+                          모든 API는 JSON 형식 응답
+
+[데이터베이스]
+- database_setup.sql     : 3개 테이블 스키마
+                          car_models (차량 모델)
+                          car_engines (엔진 정보)
+                          genuine_parts (순정부품)
+
+[설정]
+- config/db.php          : DB 연결 (PDO)
+                          보안 함수
+                          에러 처리
+
+[엑셀 처리]
+- import_excel_data.php  : 독립 실행 스크립트
+- admin/api/import_excel.php : API 버전
+                          PhpSpreadsheet 사용
+                          대량 데이터 Import
+
+═══════════════════════════════════════════════════════════════
+
+접속 URL
+
+사용자:  http://59.19.231.47/hyundai-parts/
+관리자:  http://59.19.231.47/hyundai-parts/admin/?auth=admin123
+
+API 예시:
+- GET /api/get_models.php
+- GET /api/get_engines.php?model_id=1
+- GET /api/search_parts.php?search=오일
+
+═══════════════════════════════════════════════════════════════
+
+데이터베이스 구조
+
+car_models
+  ├── id (PK)
+  ├── manufacturer (제조사)
+  ├── category (카테고리)
+  ├── brand_name (브랜드명)
+  ├── model_name (모델명)
+  ├── generation (세대)
+  └── created_at
+
+car_engines
+  ├── id (PK)
+  ├── car_model_id (FK → car_models)
+  ├── engine_type (엔진 타입)
+  └── engine_name (엔진명)
+
+genuine_parts
+  ├── id (PK)
+  ├── category_main (대분류)
+  ├── category_sub (소분류)
+  ├── product_name (제품명)
+  ├── capacity (용량)
+  ├── part_number (부품번호, UNIQUE)
+  ├── compatible_engines (호환 엔진)
+  ├── notes (비고)
+  └── created_at
+
+═══════════════════════════════════════════════════════════════
+
+기술 스택
+
+Backend:   PHP 8.0, MariaDB 10, PDO
+Frontend:  Bootstrap 5, Vanilla JS, Font Awesome
+Server:    Apache 2.4, 시놀로지 NAS
+Library:   PhpSpreadsheet (엑셀), Composer
+
+═══════════════════════════════════════════════════════════════
+
+버전: 1.0.0
+날짜: 2025-11-16
+상태: ✅ 배포 준비 완료

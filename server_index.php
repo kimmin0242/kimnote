@@ -387,28 +387,13 @@
                 if (engineType) params.append('engine_type', engineType);
                 if (partName) params.append('part_name', partName);
                 
-                // Use absolute path from document root
-                const apiUrl = './api/search_parts_with_mapping.php?' + params.toString();
-                console.log('API 호출:', apiUrl);
-                
-                const response = await fetch(apiUrl);
-                
-                // Check if response is OK
-                if (!response.ok) {
-                    console.error('HTTP 에러:', response.status, response.statusText);
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
+                const response = await fetch(`api/search_parts_advanced.php?${params}`);
                 const data = await response.json();
-                console.log('API 응답:', data);
                 
                 document.getElementById('loading').classList.add('d-none');
                 
                 if (!data.success) {
                     alert(data.message || '검색 중 오류가 발생했습니다.');
-                    if (data.debug) {
-                        console.error('서버 에러:', data.debug);
-                    }
                     return;
                 }
                 
@@ -421,7 +406,7 @@
             } catch (error) {
                 console.error('검색 실패:', error);
                 document.getElementById('loading').classList.add('d-none');
-                alert('검색 중 오류가 발생했습니다.\n\n개발자 도구(F12)의 Console 탭에서 자세한 정보를 확인하세요.\n\n에러: ' + error.message);
+                alert('검색 중 오류가 발생했습니다.');
             }
         }
 
@@ -517,17 +502,13 @@
                             <h3 class="card-title text-primary mb-3" style="font-size: 1.8rem; font-weight: bold;">
                                 ${part.part_number}
                             </h3>
-                            <h6 class="card-subtitle mb-3 text-muted">${part.product_name || '부품명 없음'}</h6>
+                            <h6 class="card-subtitle mb-3 text-muted">${part.part_name || '부품명 없음'}</h6>
                             <p class="card-text mb-2">
                                 ${part.capacity ? `<strong>용량:</strong> <span class="badge bg-info">${part.capacity}</span><br>` : ''}
                                 ${part.quantity ? `<strong>수량:</strong> <span class="badge bg-success">${part.quantity}</span><br>` : ''}
                                 ${part.position ? `<strong>위치:</strong> <span class="badge bg-warning text-dark">${part.position}</span><br>` : ''}
                             </p>
-                            ${part.mapping_notes ? `
-                                <div class="alert alert-info py-2 px-3 mb-0" style="font-size: 0.9rem;">
-                                    <i class="fas fa-info-circle"></i> <strong>비고:</strong> ${part.mapping_notes}
-                                </div>
-                            ` : ''}
+                            ${part.notes ? `<p class="card-text"><small class="text-muted">${part.notes}</small></p>` : ''}
                         </div>
                     </div>
                 `;

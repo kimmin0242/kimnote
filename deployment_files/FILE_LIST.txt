@@ -1,0 +1,152 @@
+====================================================
+  배포 파일 목록 및 경로 매핑
+====================================================
+
+📦 deployment_files 폴더 구조:
+
+deployment_files/
+├── 배포가이드.txt               ← 전체 배포 가이드
+├── UPLOAD_GUIDE.txt             ← FTP/SFTP 업로드 방법
+├── FILE_LIST.txt                ← 이 파일 (파일 목록)
+│
+├── add_notes_column.php         → /volume1/web/hyundai-parts/add_notes_column.php
+├── admin_vehicle_parts.php      → /volume1/web/hyundai-parts/admin_vehicle_parts.php
+├── save_vehicle_parts_api.php   → /volume1/web/hyundai-parts/save_vehicle_parts_api.php
+├── get_vehicle_parts_api.php    → /volume1/web/hyundai-parts/get_vehicle_parts_api.php
+├── index.php                    → /volume1/web/hyundai-parts/index.php
+│
+├── db.php                       → /volume1/web/hyundai-parts/config/db.php
+│
+└── api/
+    ├── search_debug.php         → /volume1/web/hyundai-parts/api/search_debug.php
+    ├── vehicle_models_api.php   → /volume1/web/hyundai-parts/api/vehicle_models_api.php
+    └── vehicle_engines_api.php  → /volume1/web/hyundai-parts/api/vehicle_engines_api.php
+
+====================================================
+파일별 상세 정보
+====================================================
+
+1. add_notes_column.php (신규 파일)
+   용도: 데이터베이스 마이그레이션 스크립트
+   경로: /volume1/web/hyundai-parts/add_notes_column.php
+   크기: 2.0K
+   변경사항:
+   - vehicle_parts_mapping 테이블에 notes 컬럼 추가
+   - 프로덕션 DB 비밀번호 포함 (Kdmdtt1225**)
+
+2. admin_vehicle_parts.php (수정)
+   용도: 관리자 부품 매핑 페이지
+   경로: /volume1/web/hyundai-parts/admin_vehicle_parts.php
+   크기: 22K
+   변경사항:
+   - 비고 입력 필드 추가 (col-md-3 레이아웃)
+   - 플레이스홀더: "예: 2021~2023년식, 고급형 전용 등"
+   - 저장 로직에 notes 포함
+   - DB 비밀번호 업데이트 (Kdmdtt1225**)
+
+3. save_vehicle_parts_api.php (수정)
+   용도: 부품 매핑 데이터 저장 API
+   경로: /volume1/web/hyundai-parts/save_vehicle_parts_api.php
+   크기: 3.6K
+   변경사항:
+   - INSERT 쿼리에 notes 컬럼 추가
+   - Runtime 컬럼 체크 (하위 호환성)
+   - DB 비밀번호 업데이트 (Kdmdtt1225**)
+
+4. get_vehicle_parts_api.php (수정)
+   용도: 부품 매핑 데이터 로드 API
+   경로: /volume1/web/hyundai-parts/get_vehicle_parts_api.php
+   크기: 1.7K
+   변경사항:
+   - SELECT 쿼리에 notes 컬럼 포함
+   - Runtime 컬럼 체크
+   - DB 비밀번호 업데이트 (Kdmdtt1225**)
+
+5. index.php (수정)
+   용도: 사용자 검색 페이지
+   경로: /volume1/web/hyundai-parts/index.php
+   크기: 24K
+   변경사항:
+   - API 엔드포인트 변경 (search_parts_with_mapping.php)
+   - 검색 결과에 비고 표시 (파란색 alert-info 스타일)
+   - 형식: "ℹ️ 비고: [내용]"
+
+6. db.php (수정) ⚠️ 중요
+   용도: 중앙 데이터베이스 설정 파일
+   경로: /volume1/web/hyundai-parts/config/db.php
+   크기: 1.8K
+   변경사항:
+   - DB_PASS 상수: Kdmdtt1225**
+   - ⚠️ 기존 파일 덮어쓰기 필요
+
+7. api/search_debug.php (신규 파일)
+   용도: 500 에러 디버깅 도구
+   경로: /volume1/web/hyundai-parts/api/search_debug.php
+   크기: 1.5K
+   변경사항:
+   - 상세한 에러 트레이스 출력
+   - DB 연결 테스트 기능
+   - 프로덕션 DB 비밀번호 포함
+
+8. api/vehicle_models_api.php (수정)
+   용도: 차량 모델 조회 API
+   경로: /volume1/web/hyundai-parts/api/vehicle_models_api.php
+   크기: 2.4K
+   변경사항:
+   - DB 비밀번호 업데이트 (Kdmdtt1225**)
+
+9. api/vehicle_engines_api.php (수정)
+   용도: 차량 엔진 조회 API
+   경로: /volume1/web/hyundai-parts/api/vehicle_engines_api.php
+   크기: 2.7K
+   변경사항:
+   - DB 비밀번호 업데이트 (Kdmdtt1225**)
+
+====================================================
+배포 체크리스트
+====================================================
+
+업로드 전:
+[ ] deployment_files 폴더 내 모든 파일 확인
+[ ] 배포가이드.txt 숙독
+[ ] UPLOAD_GUIDE.txt 참조하여 업로드 방법 선택
+[ ] 기존 파일 백업 (선택사항)
+
+업로드:
+[ ] 루트 파일 5개 업로드
+[ ] config/db.php 업로드 (덮어쓰기)
+[ ] api/ 파일 3개 업로드
+
+업로드 후:
+[ ] 파일 권한 확인 (chmod 644)
+[ ] 마이그레이션 실행 (add_notes_column.php)
+[ ] 관리자 페이지 테스트
+[ ] 검색 페이지 테스트
+[ ] 비고 기능 동작 확인
+
+====================================================
+주요 변경사항 요약
+====================================================
+
+🔐 DB 비밀번호: Kdmdtt1225**
+   → 8개 파일에 적용
+
+🆕 비고(Notes) 필드:
+   → 부품 매핑 시 상세 정보 입력 가능
+   → 검색 결과에 자동 표시
+
+📊 데이터베이스 변경:
+   → vehicle_parts_mapping.notes (TEXT NULL)
+
+====================================================
+Git 없이 배포하기
+====================================================
+
+이 파일들은 Git 없이 FTP/SFTP로 직접 업로드하도록
+준비되었습니다.
+
+Git을 나중에 설치하려면:
+1. Synology 패키지 센터에서 "Git Server" 설치
+2. SSH 접속 후: sudo apt-get install git (일부 모델)
+
+====================================================

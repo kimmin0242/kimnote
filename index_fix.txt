@@ -1,0 +1,25 @@
+===== index.php 수정 사항 =====
+
+430번 줄 근처:
+const productName = part.product_name ? part.product_name.toLowerCase() : '';
+→ 변경:
+const partName = part.part_name ? part.part_name.toLowerCase() : '';
+
+502-508번 줄 근처 (카드 렌더링 부분):
+<div class="card-body">
+    <h5 class="card-title">${part.product_name}</h5>
+    <p class="card-text mb-2">
+        <strong>부품번호:</strong> <code>${part.part_number}</code><br>
+        ${part.capacity ? `<strong>용량:</strong> ${part.capacity}<br>` : ''}
+        ${part.compatible_engines ? `<strong>호환 엔진:</strong> ${part.compatible_engines}<br>` : ''}
+    </p>
+
+→ 변경:
+<div class="card-body">
+    <h3 class="card-title text-primary mb-3" style="font-size: 1.5rem; font-weight: bold;">${part.part_number}</h3>
+    <h6 class="card-subtitle mb-3 text-muted">${part.part_name}</h6>
+    <p class="card-text mb-2">
+        ${part.capacity ? `<strong>용량:</strong> ${part.capacity}<br>` : ''}
+        ${part.quantity ? `<strong>수량:</strong> ${part.quantity}<br>` : ''}
+        ${part.position ? `<strong>위치:</strong> ${part.position}<br>` : ''}
+    </p>

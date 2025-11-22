@@ -1,0 +1,127 @@
+====================================================
+  FTP/SFTP 파일 업로드 가이드
+====================================================
+
+Git이 설치되지 않은 Synology NAS에 파일을 업로드하는 방법입니다.
+
+====================================================
+방법 1: FileZilla 사용 (권장)
+====================================================
+
+1. FileZilla 다운로드 및 설치
+   https://filezilla-project.org/
+
+2. 연결 정보 입력
+   호스트: sftp://59.19.231.47
+   사용자명: kdm0242
+   비밀번호: [귀하의 SSH 비밀번호]
+   포트: 22
+
+3. 연결 후 원격 디렉토리로 이동
+   /volume1/web/hyundai-parts/
+
+4. 파일 업로드
+   - 로컬에서 파일을 선택하여 드래그 앤 드롭
+   - 또는 우클릭 → "업로드"
+
+====================================================
+방법 2: WinSCP 사용 (Windows)
+====================================================
+
+1. WinSCP 다운로드 및 설치
+   https://winscp.net/
+
+2. 새 세션 만들기
+   파일 프로토콜: SFTP
+   호스트 이름: 59.19.231.47
+   포트 번호: 22
+   사용자 이름: kdm0242
+   비밀번호: [귀하의 SSH 비밀번호]
+
+3. 로그인 후 원격 경로 이동
+   /volume1/web/hyundai-parts/
+
+4. 파일 드래그 앤 드롭으로 업로드
+
+====================================================
+방법 3: 명령어 사용 (로컬 머신에서)
+====================================================
+
+Mac/Linux에서 scp 명령 사용:
+
+cd [deployment_files 폴더 경로]
+
+# 루트 파일들 업로드
+scp add_notes_column.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/
+scp admin_vehicle_parts.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/
+scp save_vehicle_parts_api.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/
+scp get_vehicle_parts_api.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/
+scp index.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/
+
+# config 파일 업로드
+scp db.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/config/
+
+# api 파일들 업로드
+scp api/search_debug.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/api/
+scp api/vehicle_models_api.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/api/
+scp api/vehicle_engines_api.php kdm0242@59.19.231.47:/volume1/web/hyundai-parts/api/
+
+====================================================
+방법 4: Synology File Station 사용
+====================================================
+
+1. 웹 브라우저로 Synology DSM 접속
+   http://59.19.231.47:5000 (또는 DSM 포트)
+
+2. File Station 앱 실행
+
+3. 경로 이동: web → hyundai-parts
+
+4. 업로드 버튼 클릭하여 파일 선택
+
+5. 기존 파일 덮어쓰기 확인
+
+====================================================
+업로드할 파일 목록 (총 9개)
+====================================================
+
+루트 디렉토리 (/volume1/web/hyundai-parts/):
+  ☐ add_notes_column.php
+  ☐ admin_vehicle_parts.php
+  ☐ save_vehicle_parts_api.php
+  ☐ get_vehicle_parts_api.php
+  ☐ index.php
+
+config 디렉토리 (/volume1/web/hyundai-parts/config/):
+  ☐ db.php
+
+api 디렉토리 (/volume1/web/hyundai-parts/api/):
+  ☐ search_debug.php
+  ☐ vehicle_models_api.php
+  ☐ vehicle_engines_api.php
+
+====================================================
+업로드 후 확인사항
+====================================================
+
+1. 파일 권한 확인 (SSH 접속 후)
+   cd /volume1/web/hyundai-parts
+   chmod 644 *.php
+   chmod 644 config/db.php
+   chmod 644 api/*.php
+
+2. 파일 소유자 확인 (필요시)
+   chown http:http *.php
+   chown http:http config/db.php
+   chown http:http api/*.php
+
+====================================================
+다음 단계
+====================================================
+
+파일 업로드 완료 후:
+
+1. 배포가이드.txt 파일을 참조하여 마이그레이션 실행
+2. 동작 확인
+
+====================================================
