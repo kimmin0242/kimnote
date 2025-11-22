@@ -217,12 +217,12 @@ try {
                         </a>
                     </div>
                     <div class="col-md-4">
-                        <a href="../admin_excel_converter.php" class="text-decoration-none">
+                        <a href="../admin_part_categories.php" class="text-decoration-none">
                             <div class="card menu-card">
                                 <div class="card-body text-center py-4">
-                                    <i class="fas fa-file-excel fa-3x text-warning mb-3"></i>
-                                    <h5>Excel 변환 도구</h5>
-                                    <p class="text-muted mb-0">차종별 시트 분리 변환</p>
+                                    <i class="fas fa-tags fa-3x text-info mb-3"></i>
+                                    <h5>부품 카테고리 관리</h5>
+                                    <p class="text-muted mb-0">오일, 필터 등 부품 타입 관리</p>
                                 </div>
                             </div>
                         </a>
@@ -292,39 +292,6 @@ try {
                                 <li><strong>CSV로 저장</strong>: 수정 완료 후 반드시 <strong>CSV UTF-8 (쉼표로 분리)</strong> 형식으로 저장합니다.</li>
                                 <li><strong>업로드</strong>: 저장한 CSV 파일을 위의 업로드 폼에서 선택하여 업로드합니다.</li>
                             </ol>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 시스템 정보 -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header bg-success text-white">
-                                <h5><i class="fas fa-check-circle"></i> 시스템 정보</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h6>✅ 차량-부품 매핑 시스템</h6>
-                                        <ul>
-                                            <li><strong>차량 정보</strong>: 제조사, 브랜드, 카테고리, 모델명, 세대</li>
-                                            <li><strong>엔진 정보</strong>: 연료 타입, 엔진 타입별 관리</li>
-                                            <li><strong>부품 매핑</strong>: 차량별/엔진별 정확한 부품 연결</li>
-                                            <li><strong>2단계 분류</strong>: 부품 카테고리 체계적 관리</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6>🆕 최신 업데이트 (2025-11-21)</h6>
-                                        <ul>
-                                            <li>✅ 완전한 차량-부품 매핑 시스템 구현</li>
-                                            <li>✅ 동적 컬럼 체크로 완벽한 하위 호환성</li>
-                                            <li>✅ 2단계 드롭다운 부품 분류 시스템</li>
-                                            <li>✅ 차량별 연료 타입 지원</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
